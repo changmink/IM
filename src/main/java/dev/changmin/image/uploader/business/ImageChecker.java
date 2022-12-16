@@ -19,7 +19,7 @@ public class ImageChecker {
     public boolean isNotAvailableImage(Path path) {
         String fileName = path.toString();
         return !(
-                    fileName.endsWith(".jpg") ||
+                    fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") ||
                     fileName.endsWith(".png")
                 );
     }
