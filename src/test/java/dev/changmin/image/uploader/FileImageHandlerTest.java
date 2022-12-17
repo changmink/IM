@@ -1,7 +1,7 @@
 package dev.changmin.image.uploader;
 
 import dev.changmin.image.uploader.business.ImageChecker;
-import dev.changmin.image.uploader.business.ImageHandler;
+import dev.changmin.image.uploader.business.FileImageHandler;
 import dev.changmin.image.uploader.exception.NotExistException;
 import dev.changmin.image.uploader.exception.NotImageException;
 import org.junit.jupiter.api.Assertions;
@@ -16,9 +16,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-public class ImageHandlerTest extends ImageUploaderApplicationTests{
+public class FileImageHandlerTest extends ImageUploaderApplicationTests{
     private ImageChecker imageChecker = mock(ImageChecker.class);
-    private ImageHandler imageHandler = new ImageHandler(imageChecker);
+    private FileImageHandler fileImageHandler = new FileImageHandler(imageChecker);
 
     @Test
     public void success() {
@@ -29,7 +29,7 @@ public class ImageHandlerTest extends ImageUploaderApplicationTests{
 
         given(imageChecker.isNotAvailableImage(any())).willReturn(false);
 
-        imageHandler.writeImage(filePart);
+        fileImageHandler.writeImage(filePart);
     }
 
 
@@ -44,7 +44,7 @@ public class ImageHandlerTest extends ImageUploaderApplicationTests{
         given(imageChecker.isExist(any())).willReturn(true);
 
         Assertions.assertThrows(NotExistException.class, () -> {
-            imageHandler.writeImage(filePart);
+            fileImageHandler.writeImage(filePart);
         });
 
         tempfile.deleteOnExit();
@@ -61,7 +61,7 @@ public class ImageHandlerTest extends ImageUploaderApplicationTests{
         given(imageChecker.isNotAvailableImage(any())).willReturn(true);
 
         Assertions.assertThrows(NotImageException.class, () -> {
-            imageHandler.writeImage(filePart);
+            fileImageHandler.writeImage(filePart);
         });
         tempfile.deleteOnExit();
     }

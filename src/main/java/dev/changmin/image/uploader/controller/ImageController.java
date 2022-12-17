@@ -1,6 +1,6 @@
 package dev.changmin.image.uploader.controller;
 
-import dev.changmin.image.uploader.business.ImageHandler;
+import dev.changmin.image.uploader.business.FileImageHandler;
 import dev.changmin.image.uploader.model.ResponseForm;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,16 +11,16 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/image")
 public class ImageController {
-    private ImageHandler imageHandler;
+    private FileImageHandler fileImageHandler;
 
-    public ImageController(ImageHandler imageHandler) {
-        this.imageHandler = imageHandler;
+    public ImageController(FileImageHandler fileImageHandler) {
+        this.fileImageHandler = fileImageHandler;
     }
 
     @PostMapping
     public Mono<ResponseForm> upload(Mono<FilePart> image) {
             return image.flatMap(imageFilePart -> {
-                return imageHandler.writeImage(imageFilePart);
-            }).thenReturn(new ResponseForm("Success", 200));
+                return fileImageHandler.writeImage(imageFilePart);
+            }).thenReturn(new ResponseForm("Success", 0));
     }
 }
