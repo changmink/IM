@@ -1,5 +1,6 @@
 package dev.changmin.image.uploader.controller;
 
+import dev.changmin.image.uploader.business.AzureImageHandler;
 import dev.changmin.image.uploader.business.FileImageHandler;
 import dev.changmin.image.uploader.business.ImageHandler;
 import dev.changmin.image.uploader.business.S3ImageHandler;
@@ -15,7 +16,7 @@ import reactor.core.publisher.Mono;
 public class ImageController {
     private ImageHandler imageHandler;
 
-    public ImageController(S3ImageHandler imageHandler) {
+    public ImageController(AzureImageHandler imageHandler) {
         this.imageHandler = imageHandler;
     }
 
