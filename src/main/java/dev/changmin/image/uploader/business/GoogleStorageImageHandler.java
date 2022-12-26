@@ -25,23 +25,20 @@ public class GoogleStorageImageHandler implements ImageHandler{
     private String googleStorageKey;
 
     @Override
-    public Mono<Void> writeImage(FilePart imageFilePart) {
-        File file = new File(imageFilePart.filename());
-        return imageFilePart.transferTo(file)
-                .doOnSuccess(v -> {
-                    try {
-                        InputStream inputStream = new ClassPathResource(googleStorageKey).getInputStream();
-                        Storage storage = StorageOptions.newBuilder()
-                                .setProjectId(googleStorageProjectId)
-                                .setCredentials(GoogleCredentials.fromStream(inputStream))
-                                .build()
-                                .getService();
-                        BlobId blobId = BlobId.of(googleStorageBucket, "images/" + imageFilePart.filename());
-                        BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
-                        storage.createFrom(blobInfo, file.toPath());
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+    public Mono<Void> writeImage(File imageFile) {
+        try {
+            InputStream inputStream = new ClassPathResource(googleStorageKey).getInputStream();
+            Storage storage = StorageOptions.newBuilder()
+                    .setProjectId(googleStorageProjectId)
+                    .setCredentials(GoogleCredentials.fromStream(inputStream))
+                    .build()
+                    .getService();
+            BlobId blobId = BlobId.of(googleStorageBucket, "images/" + imageFile.getName());
+            BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
+            storage.createFrom(blobInfo, imageFile.toPath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 }

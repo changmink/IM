@@ -11,24 +11,20 @@ import reactor.core.publisher.Mono;
 import java.io.File;
 
 @Service
-public class S3ImageHandler implements ImageHandler{
+public class AmazonS3ImageHandler implements ImageHandler{
     @Value("${AMAZON_S3_BUCKET}")
     private String amazonS3Bucket;
 
 
     @Override
-    public Mono<Void> writeImage(FilePart imageFilePart) {
+    public Mono<Void> writeImage(File imageFile) {
         AmazonS3 s3 = AmazonS3ClientBuilder.standard()
                                             .build();
         try {
-            File file = new File(imageFilePart.filename());
-            return imageFilePart.transferTo(file)
-                            .doOnSuccess(s -> {
-                                s3.putObject(amazonS3Bucket, "images/" + imageFilePart.filename(), file);
-                            });
-
+            s3.putObject(amazonS3Bucket, "images/" + imageFile.getName(), imageFile);
         } catch (SdkClientException e) {
             throw new RuntimeException(e);
         }
+        return null;
     }
 }

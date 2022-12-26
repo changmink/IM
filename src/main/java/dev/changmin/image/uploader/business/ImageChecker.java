@@ -2,6 +2,7 @@ package dev.changmin.image.uploader.business;
 
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -11,13 +12,13 @@ import java.nio.file.Path;
 * */
 @Component
 public class ImageChecker {
-    public boolean isExist(Path path) {
-        return Files.exists(path);
+    public boolean isExist(File file) {
+        return Files.exists(file.toPath());
     }
 
     // 추후에 라이브러리 통해서 파일 헤더 확인 예정
-    public boolean isNotAvailableImage(Path path) {
-        String fileName = path.toString();
+    public boolean isNotAvailableImage(File file) {
+        String fileName = file.getName();
         return !(
                     fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") ||
                     fileName.endsWith(".png")

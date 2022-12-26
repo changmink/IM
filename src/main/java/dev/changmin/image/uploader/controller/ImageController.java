@@ -1,6 +1,7 @@
 package dev.changmin.image.uploader.controller;
 
 import dev.changmin.image.uploader.business.*;
+import dev.changmin.image.uploader.model.RequestForm;
 import dev.changmin.image.uploader.model.ResponseForm;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,16 +12,16 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/image")
 public class ImageController {
-    private ImageHandler imageHandler;
+    private ImageService imageService;
 
-    public ImageController(GoogleStorageImageHandler imageHandler) {
-        this.imageHandler = imageHandler;
+    public ImageController(ImageService imageService) {
+        this.imageService = imageService;
     }
 
     @PostMapping
-    public Mono<ResponseForm> upload(Mono<FilePart> image) {
-            return image.flatMap(imageFilePart -> {
-                return imageHandler.writeImage(imageFilePart);
+    public Mono<ResponseForm> upload(Mono<RequestForm> request) {
+            return request.flatMap(req -> {
+                return imageService.writeImage(req);
             }).thenReturn(new ResponseForm("Success", 0));
     }
 }
