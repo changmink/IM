@@ -1,9 +1,6 @@
 package dev.changmin.image.uploader.controller;
 
-import dev.changmin.image.uploader.business.AzureImageHandler;
-import dev.changmin.image.uploader.business.FileImageHandler;
-import dev.changmin.image.uploader.business.ImageHandler;
-import dev.changmin.image.uploader.business.S3ImageHandler;
+import dev.changmin.image.uploader.business.*;
 import dev.changmin.image.uploader.model.ResponseForm;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +13,7 @@ import reactor.core.publisher.Mono;
 public class ImageController {
     private ImageHandler imageHandler;
 
-    public ImageController(AzureImageHandler imageHandler) {
+    public ImageController(GoogleStorageImageHandler imageHandler) {
         this.imageHandler = imageHandler;
     }
 
