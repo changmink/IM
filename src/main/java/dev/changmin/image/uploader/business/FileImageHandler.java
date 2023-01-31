@@ -23,7 +23,7 @@ public class FileImageHandler implements ImageHandler {
     }
 
     @Override
-    public Mono<Void> writeImage(FilePart imageFilePart){
+    public Mono<String> writeImage(FilePart imageFilePart){
         Path writePath = Path.of(String.join("/", basePath, imageFilePart.filename()));
         if (imageChecker.isExist(writePath)) {
             throw new DuplicateFileNameException();
@@ -37,6 +37,6 @@ public class FileImageHandler implements ImageHandler {
             throw new NotImageException();
         }
 
-        return imageFilePart.transferTo(writePath);
+        return imageFilePart.transferTo(writePath).thenReturn(writePath.toString());
     }
 }

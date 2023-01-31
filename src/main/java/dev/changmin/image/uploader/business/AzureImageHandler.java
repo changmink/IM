@@ -14,7 +14,7 @@ public class AzureImageHandler implements ImageHandler {
     @Value("${AZURE_BLOB_ENDPOINT}")
     private String azureBlobEndpoint;
     @Override
-    public Mono<Void> writeImage(FilePart imageFilePart) {
+    public Mono<String> writeImage(FilePart imageFilePart) {
         File file = new File(imageFilePart.filename());
         BlobServiceAsyncClient client = new BlobServiceClientBuilder()
                 .endpoint(azureBlobEndpoint)
@@ -26,6 +26,6 @@ public class AzureImageHandler implements ImageHandler {
                                     return blobContainerAsyncClient.getBlobAsyncClient(imageFilePart.filename())
                                                                 .uploadFromFile(file.getPath());
                                 }).subscribe();
-                        });
+                        }).thenReturn(file.getPath());
     }
 }

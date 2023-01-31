@@ -12,18 +12,19 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/image")
+@RequestMapping("/images")
 public class ImageController {
     private ImageHandler imageHandler;
 
-    public ImageController(AzureImageHandler imageHandler) {
+    public ImageController(S3ImageHandler imageHandler) {
         this.imageHandler = imageHandler;
     }
 
     @PostMapping
     public Mono<ResponseForm> upload(Mono<FilePart> image) {
             return image.flatMap(imageFilePart -> {
-                return imageHandler.writeImage(imageFilePart);
-            }).thenReturn(new ResponseForm("Success", 0));
+                return imageHandler.writeImage(imageFilePart)
+                        .map(path -> new ResponseForm("Success", 0, path));
+            });
     }
 }
