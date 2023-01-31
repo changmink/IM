@@ -1,8 +1,9 @@
 package dev.changmin.image.uploader.business;
 
+import dev.changmin.image.uploader.model.ImageInfo;
 import org.springframework.http.codec.multipart.FilePart;
 import reactor.core.publisher.Mono;
 
 public interface ImageHandler {
-    Mono<String> writeImage(FilePart imageFilePart);
+    Mono<String> writeImage(ImageInfo imageInfo);
 }
