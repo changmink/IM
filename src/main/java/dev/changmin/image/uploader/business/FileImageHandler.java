@@ -42,4 +42,10 @@ public class FileImageHandler implements ImageHandler {
                 .map(d -> dataBufferFactory.wrap(d)), path, StandardOpenOption.CREATE)
                 .thenReturn(writePath);
     }
+
+    @Override
+    public Mono<ImageInfo> getImage(String path) {
+        // 구현 필요
+        return null;
+    }
 }

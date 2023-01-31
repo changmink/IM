@@ -33,10 +33,10 @@ public class ImageController {
     @GetMapping(path = {"/{folder}/{path}", "/{path}"})
     public Mono<ResponseEntity<Flux<ByteBuffer>>> download(@PathVariable("folder") Optional<String> folder, @PathVariable("path") String path) {
         String dir = (folder.isPresent())? folder.get() + "/" + path : path;
-        return imageHandler.getImage(dir).map(resp -> {
+        return imageHandler.getImage(dir).map(imageInfo -> {
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_TYPE,resp.response().contentType())
-                    .body(Flux.from(resp));
+                    .header(HttpHeaders.CONTENT_TYPE, imageInfo.getMediaType().toString())
+                    .body(imageInfo.getData());
         });
     }
 }

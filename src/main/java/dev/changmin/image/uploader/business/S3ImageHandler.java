@@ -3,7 +3,9 @@ package dev.changmin.image.uploader.business;
 import dev.changmin.image.uploader.model.ImageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.core.async.AsyncResponseTransformer;
@@ -42,12 +44,13 @@ public class S3ImageHandler implements ImageHandler{
                 });
     }
 
-    public Mono<ResponsePublisher<GetObjectResponse>> getImage(String path) {
+    public Mono<ImageInfo> getImage(String path) {
         GetObjectRequest getObjectRequest = GetObjectRequest.builder()
                 .bucket(buketName)
                 .key(path)
                 .build();
 
-        return Mono.fromFuture(s3Client.getObject(getObjectRequest, AsyncResponseTransformer.toPublisher()));
+        return Mono.fromFuture(s3Client.getObject(getObjectRequest, AsyncResponseTransformer.toPublisher()))
+                .map(resp -> new ImageInfo(Flux.from(resp), MediaType.valueOf(resp.response().contentType()), resp.response().contentLength()));
     }
 }

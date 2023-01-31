@@ -6,4 +6,5 @@ import reactor.core.publisher.Mono;
 
 public interface ImageHandler {
     Mono<String> writeImage(ImageInfo imageInfo);
+    Mono<ImageInfo> getImage(String path);
 }
