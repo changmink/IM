@@ -1,6 +1,7 @@
 package dev.changmin.image.uploader.business;
 
-import dev.changmin.image.uploader.exception.NotExistException;
+import dev.changmin.image.uploader.exception.ImageServerException;
+import dev.changmin.image.uploader.exception.ResponseData;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,7 +21,7 @@ public class ImageHandlerManager {
     public ImageHandler get(String service) {
         StorageType storageType = imageServiceConfig.getStorage(service);
         if (null == storageType) {
-            throw new NotExistException();
+            throw new ImageServerException(ResponseData.NOT_EXIST);
         }
 
         if (storageType.equals(StorageType.AMAZON)) {

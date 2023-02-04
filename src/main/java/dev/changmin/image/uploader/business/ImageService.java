@@ -1,9 +1,9 @@
 package dev.changmin.image.uploader.business;
 
-import dev.changmin.image.uploader.exception.DuplicateFileNameException;
-import dev.changmin.image.uploader.exception.NotExistException;
-import dev.changmin.image.uploader.exception.NotImageException;
+import dev.changmin.image.uploader.exception.ImageServerException;
+import dev.changmin.image.uploader.exception.ResponseData;
 import dev.changmin.image.uploader.model.RequestForm;
+
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -23,13 +23,13 @@ public class ImageService {
         FilePart imageFilePart = requestForm.getImage();
         String service = requestForm.getService();
         if (null == service || imageFilePart.filename().isEmpty()) {
-            throw new NotExistException();
+            throw new ImageServerException(ResponseData.NOT_EXIST);
         }
 
         File imageFile = new File(imageFilePart.filename());
 
         if (imageChecker.isNotAvailableImage(imageFile)) {
-            throw new NotImageException();
+            throw new ImageServerException(ResponseData.NOT_IMAGE);
         }
 
         return imageFilePart.transferTo(imageFile)
